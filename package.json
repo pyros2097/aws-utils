@@ -10,6 +10,9 @@
   "engines": {
     "node": ">=10"
   },
+  "repository": {
+    "url": "git://github.com/pyros2097/aws-utils.git"
+  },
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
@@ -22,7 +25,7 @@
   "peerDependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "tsdx lint --fix"
     }
   },
   "prettier": {
@@ -31,7 +34,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "aws-utils",
+  "name": "@pyros2097/aws-utils",
   "author": "pyros2097",
   "module": "dist/aws-utils.esm.js",
   "size-limit": [
@@ -60,10 +63,7 @@
     "@types/jsonwebtoken": "^8.5.1",
     "@types/jwk-to-pem": "^2.0.0",
     "axios": "^0.21.1",
-    "class-transformer": "^0.4.0",
-    "class-validator": "^0.13.1",
     "jsonwebtoken": "^8.5.1",
-    "jwk-to-pem": "^2.0.4",
-    "reflect-metadata": "^0.1.13"
+    "jwk-to-pem": "^2.0.4"
   }
 }

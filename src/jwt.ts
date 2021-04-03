@@ -68,6 +68,9 @@ const getPublicKeys = async (): Promise<MapOfKidToPublicKey> => {
 };
 
 export const getToken = async (token: string): Promise<ClaimVerifyResult> => {
+  if (!token) {
+    throw new Error('You need to pass the authorization token');
+  }
   const tokenSections = (token || '').split('.');
   if (tokenSections.length < 2) {
     throw new Error('requested token is invalid');
