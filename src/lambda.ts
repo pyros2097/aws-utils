@@ -1,3 +1,4 @@
+import 'text-encoding-polyfill';
 import { LambdaClient, InvokeCommand, LambdaClientConfig } from "@aws-sdk/client-lambda";
 
 export class Lambda {

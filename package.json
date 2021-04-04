@@ -70,6 +70,7 @@
     "@types/jwk-to-pem": "^2.0.0",
     "axios": "^0.21.1",
     "jsonwebtoken": "^8.5.1",
-    "jwk-to-pem": "^2.0.4"
+    "jwk-to-pem": "^2.0.4",
+    "text-encoding-polyfill": "^0.6.7"
   }
 }
