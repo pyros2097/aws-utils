@@ -23,8 +23,8 @@ export class Table<T> {
   client: DynamoDBClient;
   schema: SchemaOf<T>;
 
-  constructor(tableName: string, schema: SchemaOf<T>) {
-    this.tableName = tableName;
+  constructor({ name, schema }: { name: string, schema: SchemaOf<T> }) {
+    this.tableName = name;
     this.client = new DynamoDBClient({});
     this.schema = schema;
   }
