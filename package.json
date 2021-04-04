@@ -23,8 +23,7 @@
     "lint": "tsdx lint --fix",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why",
-    "deploy": "np"
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {},
   "husky": {
@@ -55,7 +54,6 @@
     "@size-limit/preset-small-lib": "^4.10.1",
     "@types/yup": "^0.29.11",
     "husky": "^5.2.0",
-    "np": "^7.4.0",
     "size-limit": "^4.10.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
@@ -64,6 +62,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.10.0",
+    "@aws-sdk/client-lambda": "^3.11.0",
     "@aws-sdk/client-s3": "^3.10.0",
     "@aws-sdk/s3-request-presigner": "^3.10.0",
     "@aws-sdk/util-dynamodb": "^3.10.0",

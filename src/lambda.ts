@@ -1,0 +1,34 @@
+import { LambdaClient, InvokeCommand, LambdaClientConfig } from "@aws-sdk/client-lambda";
+
+export class Lambda {
+  client: LambdaClient;
+  stackName: string;
+  getToken: () => Promise<string>;
+  encoder = new TextEncoder();
+  decoder = new TextDecoder();
+  constructor({ stackName, config, getToken }: { stackName: string, config: LambdaClientConfig, getToken: () => Promise<string> }) {
+    this.stackName = stackName;
+    this.client = new LambdaClient(config);
+    this.getToken = getToken;
+  }
+
+  async invoke<R>(fnName: string, params: any): Promise<R> {
+    const res = await this.client.send(new InvokeCommand({
+      FunctionName: `${this.stackName}-${fnName}`,
+      Payload: this.encoder.encode(JSON.stringify({
+        token: await this.getToken(),
+        params: params,
+      })),
+      InvocationType: "RequestResponse",
+      LogType: "None"
+    }))
+    if (!res.Payload) {
+      throw new Error(`Function '${fnName}' didn't return a response `);
+    }
+    const data = JSON.parse(this.decoder.decode(res.Payload));
+    if (data && data.errors) {
+      throw data
+    }
+    return data as R;
+  }
+}
