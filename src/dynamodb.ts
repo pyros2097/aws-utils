@@ -9,7 +9,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import type { SchemaOf } from 'yup';
-import { validate } from './utils';
+import { Errors, validate } from './utils';
 
 export type Items<T> = {
   items: Array<T>;
@@ -71,8 +71,11 @@ export class Table<T> {
     };
   };
 
-  putItem = async (params: T): Promise<T> => {
-    validate<T>(this.schema, params)
+  putItem = async (params: T): Promise<T | Errors> => {
+    const err = validate<T>(this.schema, params)
+    if (err != null) {
+      return err
+    }
     await this.client.send(
       new PutItemCommand({
         TableName: this.tableName,
