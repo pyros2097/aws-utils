@@ -1,5 +1,5 @@
 {
-  "version": "0.5.1",
+  "version": "0.6.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -18,10 +18,10 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsc src/*.* -d --target esnext --module commonjs --moduleResolution node --outDir dist",
     "test": "tsdx test",
     "lint": "tsdx lint --fix",
-    "prepare": "tsdx build",
+    "prepare": "npm run build",
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
