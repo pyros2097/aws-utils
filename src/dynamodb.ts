@@ -6,10 +6,14 @@ import {
   PutItemCommand,
   ScanInput,
   QueryCommandInput,
+  GetItemCommand,
+  CreateTableCommand,
+  KeySchemaElement,
+  AttributeDefinition,
+  DescribeTableCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import type { SchemaOf } from 'yup';
-import { validate } from './utils';
 
 export type Items<T> = {
   items: Array<T>;
@@ -27,6 +31,21 @@ export class Table<T> {
     this.tableName = name;
     this.client = new DynamoDBClient({});
     this.schema = schema;
+  }
+
+  createTable = async (params: { key: KeySchemaElement[], attributes: AttributeDefinition[] }) => {
+    try {
+      await this.client.send(new DescribeTableCommand({
+        TableName: this.tableName,
+      }))
+    } catch (err) {
+      await this.client.send(new CreateTableCommand({
+        TableName: this.tableName,
+        KeySchema: params.key,
+        AttributeDefinitions: params.attributes,
+        BillingMode: 'PAY_PER_REQUEST',
+      }));
+    }
   }
 
   scanAllItems = async (): Promise<Array<T>> => {
@@ -58,6 +77,16 @@ export class Table<T> {
     };
   };
 
+  getItem = async (params: { [key: string]: any }): Promise<T | null> => {
+    const res = await this.client.send(
+      new GetItemCommand({
+        TableName: this.tableName,
+        Key: marshall(params),
+      })
+    );
+    return res.Item ? unmarshall(res.Item) as T : null;
+  }
+
   queryItems = async (params: QueryCommandInput): Promise<Items<T>> => {
     const res = await this.client.send(
       new QueryCommand({
@@ -72,7 +101,7 @@ export class Table<T> {
   };
 
   putItem = async (params: T): Promise<T> => {
-    validate<T>(this.schema, params)
+    await this.schema.validate(params, { abortEarly: false });
     await this.client.send(
       new PutItemCommand({
         TableName: this.tableName,

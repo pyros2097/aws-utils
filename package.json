@@ -1,7 +1,9 @@
 {
+  "name": "atoms-utils",
+  "author": "pyros.sh",
   "version": "0.7.2",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
@@ -10,51 +12,40 @@
   "engines": {
     "node": ">=10"
   },
-  "repository": {
-    "url": "git://github.com/pyros2097/aws-utils.git"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
+  "keywords": [
+    "react",
+    "react-native",
+    "atoms",
+    "atoms-state",
+    "atoms-ui",
+    "atoms-utils",
+    "state",
+    "pyros.sh"
+  ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsc src/*.* -d --target esnext --module commonjs --moduleResolution node --outDir dist",
+    "build": "tsc src/*.* -d --target es6 --module commonjs --moduleResolution node --outDir dist",
     "test": "tsdx test",
     "lint": "tsdx lint --fix",
     "prepare": "npm run build",
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint --fix"
+      "pre-commit": "tsdx lint"
     }
   },
   "prettier": {
-    "printWidth": 80,
+    "printWidth": 160,
     "semi": true,
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@pyros2097/aws-utils",
-  "author": "pyros2097",
-  "module": "dist/aws-utils.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/aws-utils.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/aws-utils.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.10.1",
     "@types/yup": "^0.29.11",
+    "dynamodb-local": "^0.0.31",
     "husky": "^5.2.0",
-    "size-limit": "^4.10.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^4.2.3",
