@@ -1,14 +1,10 @@
 {
   "name": "atoms-utils",
   "author": "pyros.sh",
-  "version": "0.8.0",
+  "version": "0.9.0",
+  "description": "A common aws utils library for react-native and nodejs",
   "license": "MIT",
-  "main": "dist",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "typings": "index.d.ts",
   "engines": {
     "node": ">=10"
   },
