@@ -35,9 +35,18 @@ describe('dynamodb', () => {
   })
 
   it('putItem', async () => {
-    expect(table.putItem({ id: '123' } as any)).rejects.toThrow('2 errors occurred');
-    expect(table.putItem({ id: '123', name: '123' } as any)).rejects.toThrow('place is a required field');
-    expect(table.putItem({ name: '123', place: '123' } as any)).rejects.toThrow('One or more parameter values were invalid: Missing the key id in the item')
+    expect(table.putItem({ id: '123' } as any)).rejects.toMatchObject({
+      name: "ValidationError",
+      message: JSON.stringify([{ "name": "ValidationError", "path": "name", "type": "required", "errors": ["name is a required field"], "inner": [], "message": "name is a required field", "params": { "path": "name" } }, { "name": "ValidationError", "path": "place", "type": "required", "errors": ["place is a required field"], "inner": [], "message": "place is a required field", "params": { "path": "place" } }]),
+    });
+    expect(table.putItem({ id: '123', name: '123' } as any)).rejects.toMatchObject({
+      name: "ValidationError",
+      message: JSON.stringify([{ "name": "ValidationError", "path": "place", "type": "required", "errors": ["place is a required field"], "inner": [], "message": "place is a required field", "params": { "path": "place" } }]),
+    });
+    expect(table.putItem({ name: '123', place: '123' } as any)).rejects.toMatchObject({
+      name: "ValidationException",
+      message: 'One or more parameter values were invalid: Missing the key id in the item',
+    })
     const data = await table.putItem({
       id: '123',
       name: '123',

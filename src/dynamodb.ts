@@ -13,7 +13,7 @@ import {
   DescribeTableCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import type { SchemaOf } from 'yup';
+import { SchemaOf, ValidationError } from 'yup';
 
 export type Items<T> = {
   items: Array<T>;
@@ -101,7 +101,14 @@ export class Table<T> {
   };
 
   putItem = async (params: T): Promise<T> => {
-    await this.schema.validate(params, { abortEarly: false });
+    try {
+      await this.schema.validate(params, { abortEarly: false });
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        err.message = JSON.stringify(err.inner)
+      }
+      throw err;
+    }
     await this.client.send(
       new PutItemCommand({
         TableName: this.tableName,
