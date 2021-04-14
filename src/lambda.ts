@@ -1,6 +1,17 @@
 import 'text-encoding-polyfill';
 import { LambdaClient, InvokeCommand, LambdaClientConfig } from "@aws-sdk/client-lambda";
 
+export class LambadValidationError extends Error {
+  errors: {
+    [key: string]: string
+  }
+  constructor(errors: { [key: string]: string }) {
+    super('ValidationError');
+    this.name = 'ValidationError';
+    this.errors = errors;
+  }
+}
+
 export class AWSError extends Error {
   trace: Array<string>
   constructor(name: string, message: string, trace: Array<string>) {
@@ -37,7 +48,12 @@ export class Lambda {
     }
     const data = JSON.parse(this.decoder.decode(res.Payload));
     if (data && data.errorType) {
-      throw new AWSError(data.errorType, data.errorMessage, data.trace);
+      if (data.errorType === 'ValidationError') {
+        const errors = JSON.parse(data.errorMessage);
+        throw new LambadValidationError(errors);
+      } else {
+        throw new AWSError(data.errorType, data.errorMessage, data.trace);
+      }
     }
     return data as R;
   }
